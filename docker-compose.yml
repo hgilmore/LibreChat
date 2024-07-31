@@ -5,6 +5,7 @@ version: "3.4"
 
 services:
   api:
+    command: sh -c "pwd && ls -l"
     container_name: LibreChat
     ports:
       - "${PORT}:${PORT}"
