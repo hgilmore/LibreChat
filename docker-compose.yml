@@ -27,7 +27,9 @@ services:
       - type: bind
         source: ./.env
         target: /app/.env
-      - ./librechat.yaml:/app/librechat.yaml
+      - type: bind
+        source: ./librechat.yaml
+        target: /app/librechat.yaml
       - ./images:/app/client/public/images
       - ./logs:/app/api/logs
   mongodb:
