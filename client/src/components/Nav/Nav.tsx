@@ -1,25 +1,27 @@
 import { useCallback, useEffect, useState, useMemo, memo } from 'react';
 import { useRecoilValue } from 'recoil';
 import { useParams } from 'react-router-dom';
+import { PermissionTypes, Permissions } from 'librechat-data-provider';
 import type { ConversationListResponse } from 'librechat-data-provider';
 import {
+  useLocalize,
+  useHasAccess,
   useMediaQuery,
   useAuthContext,
   useConversation,
   useLocalStorage,
   useNavScrolling,
   useConversations,
-  useLocalize,
 } from '~/hooks';
 import { useConversationsInfiniteQuery } from '~/data-provider';
 import { TooltipProvider, Tooltip } from '~/components/ui';
 import { Conversations } from '~/components/Conversations';
 import BookmarkNav from './Bookmarks/BookmarkNav';
+import AccountSettings from './AccountSettings';
 import { useSearchContext } from '~/Providers';
 import { Spinner } from '~/components/svg';
 import SearchBar from './SearchBar';
 import NavToggle from './NavToggle';
-import NavLinks from './NavLinks';
 import NewChat from './NewChat';
 import { cn } from '~/utils';
 import store from '~/store';
@@ -40,6 +42,11 @@ const Nav = ({
   const isSmallScreen = useMediaQuery('(max-width: 768px)');
   const [newUser, setNewUser] = useLocalStorage('newUser', true);
   const [isToggleHovering, setIsToggleHovering] = useState(false);
+
+  const hasAccessToBookmarks = useHasAccess({
+    permissionType: PermissionTypes.BOOKMARKS,
+    permission: Permissions.USE,
+  });
 
   const handleMouseEnter = useCallback(() => {
     setIsHovering(true);
@@ -128,7 +135,7 @@ const Nav = ({
         <div
           data-testid="nav"
           className={
-            'nav active max-w-[320px] flex-shrink-0 overflow-x-hidden bg-gray-50 dark:bg-gray-850 md:max-w-[260px]'
+            'nav active max-w-[320px] flex-shrink-0 overflow-x-hidden bg-surface-primary-alt md:max-w-[260px]'
           }
           style={{
             width: navVisible ? navWidth : '0px',
@@ -168,7 +175,9 @@ const Nav = ({
                           {isSearchEnabled === true && (
                             <SearchBar clearSearch={clearSearch} isSmallScreen={isSmallScreen} />
                           )}
-                          <BookmarkNav tags={tags} setTags={setTags} />
+                          {hasAccessToBookmarks === true && (
+                            <BookmarkNav tags={tags} setTags={setTags} />
+                          )}
                         </div>
                       ) : (
                         <NewChat
@@ -181,7 +190,9 @@ const Nav = ({
                                   isSmallScreen={isSmallScreen}
                                 />
                               )}
-                              <BookmarkNav tags={tags} setTags={setTags} />
+                              {hasAccessToBookmarks === true && (
+                                <BookmarkNav tags={tags} setTags={setTags} />
+                              )}
                             </>
                           }
                         />
@@ -196,7 +207,7 @@ const Nav = ({
                         <Spinner className={cn('m-1 mx-auto mb-4 h-4 w-4 text-text-primary')} />
                       )}
                     </div>
-                    <NavLinks />
+                    <AccountSettings />
                   </nav>
                 </div>
               </div>

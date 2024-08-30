@@ -112,10 +112,12 @@ export interface NavProps {
   defaultActive?: string;
 }
 
-interface ColumnMeta {
-  meta: {
-    size: number | string;
-  };
+export interface DataColumnMeta {
+  meta:
+    | {
+        size: number | string;
+      }
+    | undefined;
 }
 
 export enum Panel {
@@ -157,7 +159,7 @@ export type AssistantPanelProps = {
   setActivePanel: React.Dispatch<React.SetStateAction<Panel>>;
 };
 
-export type AugmentedColumnDef<TData, TValue> = ColumnDef<TData, TValue> & ColumnMeta;
+export type AugmentedColumnDef<TData, TValue> = ColumnDef<TData, TValue> & DataColumnMeta;
 
 export type TSetOption = SetOption;
 
@@ -459,17 +461,26 @@ export type NewConversationParams = {
 
 export type ConvoGenerator = (params: NewConversationParams) => void | TConversation;
 
-export type TResData = {
+export type TBaseResData = {
   plugin?: TResPlugin;
   final?: boolean;
   initial?: boolean;
   previousMessages?: TMessage[];
-  requestMessage: TMessage;
-  responseMessage: TMessage;
   conversation: TConversation;
   conversationId?: string;
   runMessages?: TMessage[];
 };
+
+export type TResData = TBaseResData & {
+  requestMessage: TMessage;
+  responseMessage: TMessage;
+};
+
+export type TFinalResData = TBaseResData & {
+  requestMessage?: TMessage;
+  responseMessage?: TMessage;
+};
+
 export type TVectorStore = {
   _id: string;
   object: 'vector_store';
