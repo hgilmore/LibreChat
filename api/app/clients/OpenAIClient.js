@@ -100,14 +100,14 @@ class OpenAIClient extends BaseClient {
       this.options.modelOptions,
     );
 
-    this.isO1Model = /\bo1\b/i.test(this.modelOptions.model);
-
     this.defaultVisionModel = this.options.visionModel ?? 'gpt-4-vision-preview';
     if (typeof this.options.attachments?.then === 'function') {
       this.options.attachments.then((attachments) => this.checkVisionRequest(attachments));
     } else {
       this.checkVisionRequest(this.options.attachments);
     }
+
+    this.isO1Model = /\bo1\b/i.test(this.modelOptions.model);
 
     const { OPENROUTER_API_KEY, OPENAI_FORCE_PROMPT } = process.env ?? {};
     if (OPENROUTER_API_KEY && !this.azure) {
@@ -553,7 +553,6 @@ class OpenAIClient extends BaseClient {
       promptPrefix = `Instructions:\n${promptPrefix.trim()}`;
       instructions = {
         role: 'system',
-        name: 'instructions',
         content: promptPrefix,
       };
 
@@ -839,6 +838,12 @@ class OpenAIClient extends BaseClient {
       this.options.dropParams = azureConfig.groupMap[groupName].dropParams;
       this.options.forcePrompt = azureConfig.groupMap[groupName].forcePrompt;
       this.azure = !serverless && azureOptions;
+      if (serverless === true) {
+        this.options.defaultQuery = azureOptions.azureOpenAIApiVersion
+          ? { 'api-version': azureOptions.azureOpenAIApiVersion }
+          : undefined;
+        this.options.headers['api-key'] = this.apiKey;
+      }
     }
 
     const titleChatCompletion = async () => {
@@ -1170,6 +1175,10 @@ ${convo}
         opts.defaultHeaders = { ...opts.defaultHeaders, ...this.options.headers };
       }
 
+      if (this.options.defaultQuery) {
+        opts.defaultQuery = this.options.defaultQuery;
+      }
+
       if (this.options.proxy) {
         opts.httpAgent = new HttpsProxyAgent(this.options.proxy);
       }
@@ -1208,6 +1217,12 @@ ${convo}
         this.azure = !serverless && azureOptions;
         this.azureEndpoint =
           !serverless && genAzureChatCompletion(this.azure, modelOptions.model, this);
+        if (serverless === true) {
+          this.options.defaultQuery = azureOptions.azureOpenAIApiVersion
+            ? { 'api-version': azureOptions.azureOpenAIApiVersion }
+            : undefined;
+          this.options.headers['api-key'] = this.apiKey;
+        }
       }
 
       if (this.azure || this.options.azure) {
@@ -1308,11 +1323,6 @@ ${convo}
       let streamPromise;
       /** @type {(value: void | PromiseLike<void>) => void} */
       let streamResolve;
-
-      if (modelOptions.stream && this.isO1Model) {
-        delete modelOptions.stream;
-        delete modelOptions.stop;
-      }
 
       if (modelOptions.stream) {
         streamPromise = new Promise((resolve) => {

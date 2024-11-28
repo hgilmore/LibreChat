@@ -222,6 +222,7 @@ export default {
   com_ui_latest_footer: 'Every AI for Everyone.',
   com_ui_enter: 'Enter',
   com_ui_submit: 'Submit',
+  com_ui_zoom: 'Zoom',
   com_ui_none_selected: 'None selected',
   com_ui_upload_success: 'Successfully uploaded file',
   com_ui_upload_error: 'There was an error uploading your file',
@@ -777,7 +778,7 @@ export default {
   com_nav_voice_select: 'Voice',
   com_nav_enable_cloud_browser_voice: 'Use cloud-based voices',
   com_nav_info_enter_to_send:
-    'When enabled, pressing `ENTER` will send your message. When disabled, pressing Enter will add a new line, and you\'ll need to press `CTRL + ENTER` to send your message.',
+    'When enabled, pressing `ENTER` will send your message. When disabled, pressing Enter will add a new line, and you\'ll need to press `CTRL + ENTER` / `⌘ + ENTER` to send your message.',
   com_nav_info_save_draft:
     'When enabled, the text and attachments you enter in the chat form will be automatically saved locally as drafts. These drafts will be available even if you reload the page or switch to a different conversation. Drafts are stored locally on your device and are deleted once the message is sent.',
   com_nav_info_fork_change_default:
