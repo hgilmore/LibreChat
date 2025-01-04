@@ -72,9 +72,12 @@ speech:
 
 #  
   stt:
+    ## Using Groq instead of OpenAI
     openai:
-      apiKey: '${STT_API_KEY}'
-      model: 'whisper-1'
+      url: 'https://api.groq.com/openai/v1/audio/transcriptions'
+      apiKey: '${GROQ_API_KEY}'
+      # apiKey: '${STT_API_KEY}'
+      model: 'distil-whisper-large-v3-en'
 
 # rateLimits:
 #   fileUploads:
