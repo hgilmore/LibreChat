@@ -28,6 +28,7 @@ services:
         source: ./librechat.yaml
         target: /app/librechat.yaml
       - ./images:/app/client/public/images
+      - ./uploads:/app/uploads
       - ./logs:/app/api/logs
   mongodb:
     container_name: chat-mongodb

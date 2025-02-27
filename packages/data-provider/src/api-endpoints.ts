@@ -10,7 +10,7 @@ export const userPlugins = () => '/api/user/plugins';
 export const deleteUser = () => '/api/user/delete';
 
 export const messages = (conversationId: string, messageId?: string) =>
-  `/api/messages/${conversationId}${messageId ? `/${messageId}` : ''}`;
+  `/api/messages/${conversationId}${messageId != null && messageId ? `/${messageId}` : ''}`;
 
 const shareRoot = '/api/share';
 export const shareMessages = (shareId: string) => `${shareRoot}/${shareId}`;
@@ -237,3 +237,11 @@ export const addTagToConversation = (conversationId: string) =>
 export const userTerms = () => '/api/user/terms';
 export const acceptUserTerms = () => '/api/user/terms/accept';
 export const banner = () => '/api/banner';
+
+// Two-Factor Endpoints
+export const enableTwoFactor = () => '/api/auth/2fa/enable';
+export const verifyTwoFactor = () => '/api/auth/2fa/verify';
+export const confirmTwoFactor = () => '/api/auth/2fa/confirm';
+export const disableTwoFactor = () => '/api/auth/2fa/disable';
+export const regenerateBackupCodes = () => '/api/auth/2fa/backup/regenerate';
+export const verifyTwoFactorTemp = () => '/api/auth/2fa/verify-temp';
