@@ -32,7 +32,7 @@ services:
       - ./logs:/app/api/logs
   mongodb:
     container_name: chat-mongodb
-    image: mongo
+    image: mongo:7
     restart: always
     user: "${UID}:${GID}"
     volumes:
